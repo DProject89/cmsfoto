@@ -1,4 +1,4 @@
-module github.com/DProject89/gocrud
+module github.com/DProject89/cmsfoto
 
 go 1.18
 

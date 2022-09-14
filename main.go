@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/DProject89/gocrud/controllers/fotografercontroller"
+	"github.com/DProject89/cmsfoto/controllers/fotografercontroller"
 )
 
 func main() {

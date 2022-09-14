@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/DProject89/gocrud/libraries"
+	"github.com/DProject89/cmsfoto/libraries"
 
-	"github.com/DProject89/gocrud/models"
+	"github.com/DProject89/cmsfoto/models"
 
-	"github.com/DProject89/gocrud/entities"
+	"github.com/DProject89/cmsfoto/entities"
 )
 
 var validation = libraries.NewValidation()

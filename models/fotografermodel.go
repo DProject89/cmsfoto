@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DProject89/gocrud/config"
-	"github.com/DProject89/gocrud/entities"
+	"github.com/DProject89/cmsfoto/config"
+	"github.com/DProject89/cmsfoto/entities"
 )
 
 type FotograferModel struct {
