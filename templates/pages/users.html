@@ -1,0 +1,173 @@
+{{ define "users" }}
+
+<div class="row">
+    <div class="col-lg-12 mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title">User Data</h4>
+                <ul class="custom-breadcrumb">
+                    <li>User CMS Management</li>
+                    <li class="active">User Data</li>
+                </ul>
+
+                <div class="mt-3">
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <label for="action">Action</label>
+                                <div class="wrap-fotogrit-select">
+                                    <select class="ml-3 fotogrit-select" name="" id="action">
+                                        <option value="">Edit</option>
+                                        <option value="">Delete</option>
+                                    </select>
+                                    <div class="fotogrit-select-arrow">
+                                        <i class="fa fa-angle-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 ml-auto">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                    </div>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th width="1">
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" class="form-check-input mt-0">
+                                    </div>
+                                </th>
+                                <th width="25%">User Code</th>
+                                <th width="25%">Name</th>
+                                <th width="25%">Email</th>
+                                <th width="20%">Status</th>
+                                <th width="1"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ range $i, $user := .users }}
+                            <tr>
+                                <td colspan="6" class="p-0">
+                                    <form action="/user/edit" method="post">
+                                        <table width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <td width="1">
+                                                        <div class="form-group form-check">
+                                                            <input type="checkbox" class="form-check-input mt-0">
+                                                        </div>
+                                                    </td>
+                                                    <td width="27%">{{ $user.ID }}</td>
+                                                    <td width="27%">{{ $user.Name }}</td>
+                                                    <td width="27%">{{ $user.Email }}</td>
+                                                    <td width="20%"><span class="{{ if eq $user.StatusId 1 }} status-active {{ else }} status-nonactive {{ end }}">{{ if eq $user.StatusId 1 }} Active {{ else }} Non Active {{ end }}</span></td>
+                                                    <td width="1">
+                                                        <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $user.ID }}" aria-expanded="true" aria-controls="collapse{{ $user.ID }}">
+                                                            <i class="fa fa-angle-down"></i>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="collapse{{ $user.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                    <td></td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label for="name">Name</label>
+                                                            <input id="name" value="{{ $user.Name }}" type="text" class="form-control" name="name" placeholder="Name">
+                                                        </div>    
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label for="email">Email</label>
+                                                            <input id="email" value="{{ $user.Email }}" type="email" class="form-control" name="email" placeholder="Email">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label for="password">Password</label>
+                                                            <input type="password" class="form-control" name="password" placeholder="Password">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label for="password">Status</label>
+                                                            <div class="wrap-switch d-flex align-items-center">
+                                                                <p>Non Active</p>
+                                                                <label class="switch">
+                                                                    <input type="checkbox" name="status_id" {{ if eq $user.StatusId 1 }} checked {{ end }}>
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <p>Active</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group d-flex mt-4">
+                                                            <input type="hidden" name="id" value="{{ $user.ID }}">
+                                                            <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                            <a href="/user/delete/{{ $user.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $user.Name }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </td>
+                            </tr>
+                            {{ end }}
+                            <form action="/user/add" method="post">
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="name">Name</label>
+                                                <input id="name" type="text" class="form-control" name="name" placeholder="Name">
+                                            </div>    
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input id="email" type="email" class="form-control" name="email" placeholder="Email">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="password">Password</label>
+                                                <input type="password" class="form-control" name="password" placeholder="Password">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="password">Status</label>
+                                                <div class="wrap-switch d-flex align-items-center">
+                                                    <p>Non Active</p>
+                                                    <label class="switch">
+                                                        <input type="checkbox" name="status_id">
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                    <p>Active</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group d-flex mt-4">
+                                                <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                <button type="button" class="btn w-100 btn-outline-danger">Cancel</button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                            </form>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ end }}
