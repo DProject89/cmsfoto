@@ -4,10 +4,9 @@
     <div class="col-lg-12 mt-5">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title">Team Data</h4>
+                <h4 class="header-title">Team Master</h4>
                 <ul class="custom-breadcrumb">
-                    <li>Team CMS Management</li>
-                    <li class="active">Team Data</li>
+                    <li>Team Master</li>
                 </ul>
 
                 <div class="mt-3">
@@ -34,36 +33,38 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th width="1">
+                                <th width="1%">
                                     <div class="form-group form-check">
                                         <input type="checkbox" class="form-check-input mt-0">
                                     </div>
                                 </th>
-                                <th width="25%">Team Code</th>
-                                <th width="25%">Name</th>
-                                <th width="25%">Email</th>
-                                <th width="20%">Status</th>
-                                <th width="1"></th>
+                                <th width="10%">Logo</th>
+                                <th width="20%">Team Name</th>
+                                <th width="20%">PIC Team</th>
+                                <th width="15%">PIC Telephone</th>
+                                <th width="20%">Location</th>
+                                <th width="5%"></th>
                             </tr>
                         </thead>
                         <tbody>
                             {{ range $i, $team := .teams }}
                             <tr>
-                                <td colspan="6" class="p-0">
+                                <td colspan="8" class="p-0">
                                     <form action="/team/edit" method="post">
                                         <table width="100%">
                                             <thead>
                                                 <tr>
-                                                    <td width="1">
+                                                    <td width="1%">
                                                         <div class="form-group form-check">
                                                             <input type="checkbox" class="form-check-input mt-0">
                                                         </div>
                                                     </td>
-                                                    <td width="27%">{{ $team.ID }}</td>
-                                                    <td width="27%">{{ $team.Name }}</td>
-                                                    <td width="27%">{{ $team.Email }}</td>
-                                                    <td width="20%"><span class="{{ if eq $team.StatusId 1 }} status-active {{ else }} status-nonactive {{ end }}">{{ if eq $team.StatusId 1 }} Active {{ else }} Non Active {{ end }}</span></td>
-                                                    <td width="1">
+                                                    <td width="10%">{{ $team.LogoTeam }}</td>
+                                                    <td width="20%">{{ $team.Name }}</td>
+                                                    <td width="20%">{{ $team.PicTeam }}</td>
+                                                    <td width="15%">{{ $team.PicTeamPhoneNumber }}</td>
+                                                    <td width="20%">{{ $team.Location }}</td>
+                                                    <td width="5%">
                                                         <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $team.ID }}" aria-expanded="true" aria-controls="collapse{{ $team.ID }}">
                                                             <i class="fa fa-angle-down"></i>
                                                         </div>
@@ -71,97 +72,152 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr id="collapse{{ $team.ID }}" class="collapse bg-white" data-parent="#accordionExample">
-                                                    <td></td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <label for="name">Name</label>
-                                                            <input id="name" value="{{ $team.Name }}" type="text" class="form-control" name="name" placeholder="Name">
-                                                        </div>    
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <label for="email">Email</label>
-                                                            <input id="email" value="{{ $team.Email }}" type="email" class="form-control" name="email" placeholder="Email">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <label for="password">Password</label>
-                                                            <input type="password" class="form-control" name="password" placeholder="Password">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <label for="password">Status</label>
-                                                            <div class="wrap-switch d-flex align-items-center">
-                                                                <p>Non Active</p>
-                                                                <label class="switch">
-                                                                    <input type="checkbox" name="status_id" {{ if eq $team.StatusId 1 }} checked {{ end }}>
-                                                                    <span class="slider round"></span>
-                                                                </label>
-                                                                <p>Active</p>
+                                                <td></td>
+                                                <td colspan="7">
+                                                    <div id="collapse{{ $team.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                        <div class="row mt-3">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="code">Team Code</label>
+                                                                    <input value="{{ $team.Code }}" id="code" type="text" class="form-control" name="code" placeholder="Team Code">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="name">Team Name</label>
+                                                                    <input value="{{ $team.Name }}" id="name" type="text" class="form-control" name="name" placeholder="Team Name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="pic_team">PIC Team</label>
+                                                                    <input value="{{ $team.PicTeam }}" id="pic_team" type="text" class="form-control" name="pic_team" placeholder="PIC Name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="pic_team_phone_number">PIC Telephone</label>
+                                                                    <input value="{{ $team.PicTeamPhoneNumber }}" id="pic_team_phone_number" type="number" class="form-control" name="pic_team_phone_number" placeholder="PIC Telephone">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="pic_team_email">PIC Email</label>
+                                                                    <input value="{{ $team.PicTeamEmail }}" id="pic_team_email" type="email" class="form-control" name="pic_team_email" placeholder="PIC Email">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="instagram_team">Instagram</label>
+                                                                    <input value="{{ $team.InstagramTeam }}" id="instagram_team" type="text" class="form-control" name="instagram_team" placeholder="Instagram Team">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="location">Location</label>
+                                                                    <input value="{{ $team.Location }}" id="location" type="text" class="form-control" name="location" placeholder="Location">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="city">City</label>
+                                                                    <select name="city" class="form-control">
+                                                                        <option value="Jakarta">Jakarta</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="event_logo">Logo</label>
+                                                                    <input id="event_logo" type="file" class="form-control" name="event_logo">
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group d-flex mt-4">
-                                                            <input type="hidden" name="id" value="{{ $team.ID }}">
-                                                            <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
-                                                            <a href="/team/delete/{{ $team.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $team.Name }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                        <div class="col-sm-3 ml-auto">
+                                                            <div class="form-group d-flex mt-4">
+                                                                <button type="submit" class="btn w-100 btn-dark mr-2">Add</button>
+                                                                <button type="button" class="btn w-100 btn-outline-danger">Cancel</button>
+                                                            </div>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        
-                                                    </td>
-                                                </tr>
+                                                    </div>
+                                                </td>
                                             </tbody>
                                         </table>
                                     </form>
                                 </td>
                             </tr>
                             {{ end }}
-                            <form action="/team/add" method="post">
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <div class="form-group">
-                                                <label for="name">Name</label>
-                                                <input id="name" type="text" class="form-control" name="name" placeholder="Name">
-                                            </div>    
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <label for="email">Email</label>
-                                                <input id="email" type="email" class="form-control" name="email" placeholder="Email">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <label for="password">Password</label>
-                                                <input type="password" class="form-control" name="password" placeholder="Password">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <label for="password">Status</label>
-                                                <div class="wrap-switch d-flex align-items-center">
-                                                    <p>Non Active</p>
-                                                    <label class="switch">
-                                                        <input type="checkbox" name="status_id">
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                    <p>Active</p>
+                            <tr>
+                                <td></td>
+                                <td colspan="7">
+                                    <form action="/team/add" method="post">
+                                        <div class="row mt-3">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="code">Team Code</label>
+                                                    <input id="code" type="text" class="form-control" name="code" placeholder="Team Code">
                                                 </div>
                                             </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="name">Team Name</label>
+                                                    <input id="name" type="text" class="form-control" name="name" placeholder="Team Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="pic_team">PIC Team</label>
+                                                    <input id="pic_team" type="text" class="form-control" name="pic_team" placeholder="PIC Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="pic_team_phone_number">PIC Telephone</label>
+                                                    <input id="pic_team_phone_number" type="number" class="form-control" name="pic_team_phone_number" placeholder="PIC Telephone">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="pic_team_email">PIC Email</label>
+                                                    <input id="pic_team_email" type="email" class="form-control" name="pic_team_email" placeholder="PIC Email">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="instagram_team">Instagram</label>
+                                                    <input id="instagram_team" type="text" class="form-control" name="instagram_team" placeholder="Instagram Team">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="location">Location</label>
+                                                    <input id="location" type="text" class="form-control" name="location" placeholder="Location">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="city">City</label>
+                                                    <select name="city" class="form-control">
+                                                        <option value="Jakarta">Jakarta</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="event_logo">Logo</label>
+                                                    <input id="event_logo" type="file" class="form-control" name="event_logo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 ml-auto">
                                             <div class="form-group d-flex mt-4">
-                                                <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                <button type="submit" class="btn w-100 btn-dark mr-2">Add</button>
                                                 <button type="button" class="btn w-100 btn-outline-danger">Cancel</button>
                                             </div>
-                                        </td>
-                                        <td>
-                                            
-                                        </td>
-                                    </tr>
-                            </form>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

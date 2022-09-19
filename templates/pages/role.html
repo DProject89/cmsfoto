@@ -1,0 +1,200 @@
+{{ define "roles" }}
+
+<div class="row">
+    <div class="col-lg-12 mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title">User Role</h4>
+                <ul class="custom-breadcrumb">
+                    <li>User Management</li>
+                    <li class="active">User Role</li>
+                </ul>
+
+                <div class="mt-3">
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <label for="action">Action</label>
+                                <div class="wrap-fotogrit-select">
+                                    <select class="ml-3 fotogrit-select" name="" id="action">
+                                        <option value="">Edit</option>
+                                        <option value="">Delete</option>
+                                    </select>
+                                    <div class="fotogrit-select-arrow">
+                                        <i class="fa fa-angle-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 ml-auto">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                    </div>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th width="1">
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" class="form-check-input mt-0">
+                                    </div>
+                                </th>
+                                <th width="5%">No</th>
+                                <th width="60%">Role</th>
+                                <th width="15%">Status</th>
+                                <th width="1"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ range $i, $role := .roles }}
+                            <tr>
+                                <td colspan="6" class="p-0">
+                                    <form action="/role/edit" method="post">
+                                        <table width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <td width="1">
+                                                        <div class="form-group form-check">
+                                                            <input type="checkbox" class="form-check-input mt-0">
+                                                        </div>
+                                                    </td>
+                                                    <td width="5%"></td>
+                                                    <td width="60%">{{ $role.Role }}</td>
+                                                    <td width="20%"><span class="{{ if eq $role.StatusRole 1 }} status-active {{ else }} status-nonactive {{ end }}">{{ if eq $role.StatusRole 1 }} Active {{ else }} Non Active {{ end }}</span></td>
+                                                    <td width="1">
+                                                        <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $role.ID }}" aria-expanded="true" aria-controls="collapse{{ $role.ID }}">
+                                                            <i class="fa fa-angle-down"></i>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- <div id="collapse{{ $role.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                    <div class="row">
+                                                        <div class="col-md12">
+                                                            <div class="col-md4">
+                                                                <div class="form-group">
+                                                                    <label for="role">Role</label>
+                                                                    <input id="role" value="{{ $role.Role }}" type="text" class="form-control" name="role" placeholder="Role">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md4">
+                                                                <div class="form-group">
+                                                                    <label for="description">Description</label>
+                                                                    <input id="description" value="{{ $role.Description }}" type="text" class="form-control" name="description" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md4">
+                                                                <div class="form-group">
+                                                                    <label for="password">Status</label>
+                                                                    <div class="wrap-switch d-flex align-items-center">
+                                                                        <p>Non Active</p>
+                                                                        <label class="switch">
+                                                                            <input type="checkbox" name="status_role" {{ if eq $role.StatusRole 1 }} checked {{ end }}>
+                                                                            <span class="slider round"></span>
+                                                                        </label>
+                                                                        <p>Active</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group d-flex mt-4">
+                                                                    <input type="hidden" name="id" value="{{ $role.ID }}">
+                                                                    <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                                    <a href="/role/delete/{{ $role.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $role.Role }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+
+
+
+                                                <tr id="collapse{{ $role.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label for="role">Role</label>
+                                                            <input id="role" value="{{ $role.Role }}" type="text" class="form-control" name="role" placeholder="Role">
+                                                        </div>    
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label for="description">Description</label>
+                                                            <input id="description" value="{{ $role.Description }}" type="text" class="form-control" name="description" placeholder="Description">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label for="password">Status</label>
+                                                            <div class="wrap-switch d-flex align-items-center">
+                                                                <p>Non Active</p>
+                                                                <label class="switch">
+                                                                    <input type="checkbox" name="status_role" {{ if eq $role.StatusRole 1 }} checked {{ end }}>
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <p>Active</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group d-flex mt-4">
+                                                            <input type="hidden" name="id" value="{{ $role.ID }}">
+                                                            <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                            <a href="/role/delete/{{ $role.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $role.Role }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </td>
+                            </tr>
+                            {{ end }}
+                            <form action="/role/add" method="post">
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="role">Role</label>
+                                                <input id="role" type="text" class="form-control" name="role" placeholder="Role">
+                                            </div>    
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="description">Description</label>
+                                                <input id="description" type="text" class="form-control" name="description" placeholder="Description">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="password">Status</label>
+                                                <div class="wrap-switch d-flex align-items-center">
+                                                    <p>Non Active</p>
+                                                    <label class="switch">
+                                                        <input type="checkbox" name="status_role">
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                    <p>Active</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group d-flex mt-4">
+                                                <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                <button type="button" class="btn w-100 btn-outline-danger">Cancel</button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                            </form>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ end }}

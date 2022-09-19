@@ -14,8 +14,8 @@ func (server *Server) Teams(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprintf(w, "Welcome to fotogrit")
 	render := render.New(render.Options{Layout: "layout", Extensions: []string{".html"}})
 
-	teamModel := models.Team{}
-	teams, err := teamModel.GetTeams(server.DB)
+	TeamModel := models.Team{}
+	teams, err := TeamModel.GetTeams(server.DB)
 
 	if err != nil {
 		return
@@ -32,16 +32,17 @@ func (server *Server) TeamEdit(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	var statusId = 0
-	if r.PostForm.Get("status_id") == "on" {
-		statusId = 1
-	}
 	var team models.Team
 	server.DB.First(&team, r.PostForm.Get("id"))
 	server.DB.Model(&team).Updates(map[string]interface{}{
-		"name":      r.PostForm.Get("name"),
-		"email":     r.PostForm.Get("email"),
-		"status_id": statusId,
+		"name":                  r.PostForm.Get("name"),
+		"code":                  r.PostForm.Get("code"),
+		"location":              r.PostForm.Get("location"),
+		"pic_team":              r.PostForm.Get("pic_team"),
+		"pic_team_phone_number": r.PostForm.Get("pic_team_phone_number"),
+		"pic_team_email":        r.PostForm.Get("pic_team_email"),
+		"instagram_team":        r.PostForm.Get("instagram_team"),
+		"city":                  r.PostForm.Get("city"),
 	})
 
 	if err != nil {
@@ -57,16 +58,15 @@ func (server *Server) TeamAdd(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	var statusId = 0
-	if r.PostForm.Get("status_id") == "on" {
-		statusId = 1
-	}
-
 	server.DB.Model(models.Team{}).Create(map[string]interface{}{
-		"name":      r.PostForm.Get("name"),
-		"email":     r.PostForm.Get("email"),
-		"password":  r.PostForm.Get("password"),
-		"status_id": statusId,
+		"name":                  r.PostForm.Get("name"),
+		"code":                  r.PostForm.Get("code"),
+		"location":              r.PostForm.Get("location"),
+		"pic_team":              r.PostForm.Get("pic_team"),
+		"pic_team_phone_number": r.PostForm.Get("pic_team_phone_number"),
+		"pic_team_email":        r.PostForm.Get("pic_team_email"),
+		"instagram_team":        r.PostForm.Get("instagram_team"),
+		"city":                  r.PostForm.Get("city"),
 	})
 
 	if err != nil {
@@ -78,7 +78,7 @@ func (server *Server) TeamAdd(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) TeamDelete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	teamID := vars["id"]
+	TeamID := vars["id"]
 
 	err := r.ParseForm()
 	if err != nil {
@@ -86,7 +86,7 @@ func (server *Server) TeamDelete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var team models.Team
-	server.DB.Where("id = ?", teamID).Delete(&team)
+	server.DB.Where("id = ?", TeamID).Delete(&team)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
