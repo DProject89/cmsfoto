@@ -1,0 +1,980 @@
+{{ define "events" }}
+
+<div class="row">
+    <div class="col-lg-12 mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title">Events</h4>
+                <ul class="custom-breadcrumb">
+                    <li>Event Master</li>
+                    <li class="active">Events</li>
+                </ul>
+
+                <div class="mt-3">
+
+                    <ul class="nav nav-pills bg-light">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#teamList">Team List</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#eventList">Event List</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rosterList">Roster List</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#mediaList">Media List</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#assignmentList">Assignment List</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="teamList" class="tab-pane fade show active">
+                            
+                            <div class="mt-4">
+                                <div class="row mb-4">
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center">
+                                            <label for="action">Action</label>
+                                            <div class="wrap-fotogrit-select">
+                                                <select class="ml-3 fotogrit-select" name="" id="action">
+                                                    <option value="">Edit</option>
+                                                    <option value="">Delete</option>
+                                                </select>
+                                                <div class="fotogrit-select-arrow">
+                                                    <i class="fa fa-angle-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 ml-auto">
+                                        <input type="text" class="form-control" placeholder="Search">
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th width="1">
+                                                <div class="form-group form-check">
+                                                    <input type="checkbox" class="form-check-input mt-0">
+                                                </div>
+                                            </th>
+                                            <th width="50%">Team Code</th>
+                                            <th width="50%">Team Name</th>
+                                            <th width="1">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{ range $i, $team := .teams }}
+                                        <tr>
+                                            <td colspan="6" class="p-0">
+                                                <form action="/team/edit" method="post">
+                                                    <table width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <td width="1">
+                                                                    <div class="form-group form-check">
+                                                                        <input type="checkbox" class="form-check-input mt-0">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="27%">{{ $team.Code }}</td>
+                                                                <td width="27%">{{ $team.Name }}</td>
+                                                                <td width="1">
+                                                                    <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $team.ID }}" aria-expanded="true" aria-controls="collapse{{ $team.ID }}">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="collapse{{ $team.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                                <td></td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="code">Code</label>
+                                                                        <input id="code" value="{{ $team.Code }}" type="text" class="form-control" name="code" placeholder="Code">
+                                                                    </div>    
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="name">Name</label>
+                                                                        <input id="name" value="{{ $team.Name }}" type="text" class="form-control" name="name" placeholder="Name">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="password">Status</label>
+                                                                        <div class="wrap-switch d-flex align-items-center">
+                                                                            <p>Non Active</p>
+                                                                            <label class="switch">
+                                                                                <input type="checkbox" name="status_id" {{ if eq $team.StatusId 1 }} checked {{ end }}>
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <p>Active</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group d-flex mt-4">
+                                                                        <input type="hidden" name="id" value="{{ $team.ID }}">
+                                                                        <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                                        <a href="/team/delete/{{ $team.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $team.Name }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {{ end }}
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="3">
+                                                <form action="/team/add" method="post"></form>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="code">Code</label>
+                                                                <input id="code" type="text" class="form-control" name="code" placeholder="Team Code">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="name">Name</label>
+                                                                <input id="name" type="text" class="form-control" name="team_name" placeholder="Team Name">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>  
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div id="eventList" class="tab-pane fade">
+                            
+                            <div class="mt-4">
+                                <div class="row mb-4">
+                                    <div class="col-sm-4">
+                                        <div class="d-flex align-items-center">
+                                            <label for="action">Group Acara</label>
+                                            <div class="wrap-fotogrit-select">
+                                                <select class="ml-3 fotogrit-select" name="" id="action">
+                                                    <option value="">Select Nama Grup Acara</option>
+                                                </select>
+                                                <div class="fotogrit-select-arrow">
+                                                    <i class="fa fa-angle-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="d-flex align-items-center">
+                                            <label for="action">Action</label>
+                                            <div class="ml-3 wrap-fotogrit-select">
+                                                <select class="fotogrit-select" name="" id="action">
+                                                    <option value="">Edit</option>
+                                                    <option value="">Delete</option>
+                                                </select>
+                                                <div class="fotogrit-select-arrow">
+                                                    <i class="fa fa-angle-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 ml-auto">
+                                        <input type="text" class="form-control" placeholder="Search">
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th width="1">
+                                                <div class="form-group form-check">
+                                                    <input type="checkbox" class="form-check-input mt-0">
+                                                </div>
+                                            </th>
+                                            <th width="15%">Group Code</th>
+                                            <th width="15%">Event Code</th>
+                                            <th width="15%">Event Name</th>
+                                            <th width="15%">Date & Time</th>
+                                            <th width="15%">Event Location</th>
+                                            <th width="15%">Created By</th>
+                                            <th width="15%">Media</th>
+                                            <th width="1">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{ range $i, $team := .teams }}
+                                        <tr>
+                                            <td colspan="6" class="p-0">
+                                                <form action="/team/edit" method="post">
+                                                    <table width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <td width="1">
+                                                                    <div class="form-group form-check">
+                                                                        <input type="checkbox" class="form-check-input mt-0">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="15%">{{ $team.Code }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="1">
+                                                                    <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $team.ID }}" aria-expanded="true" aria-controls="collapse{{ $team.ID }}">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="collapse{{ $team.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                                <td></td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="code">Code</label>
+                                                                        <input id="code" value="{{ $team.Code }}" type="text" class="form-control" name="code" placeholder="Code">
+                                                                    </div>    
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="name">Name</label>
+                                                                        <input id="name" value="{{ $team.Name }}" type="text" class="form-control" name="name" placeholder="Name">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="password">Status</label>
+                                                                        <div class="wrap-switch d-flex align-items-center">
+                                                                            <p>Non Active</p>
+                                                                            <label class="switch">
+                                                                                <input type="checkbox" name="status_id" {{ if eq $team.StatusId 1 }} checked {{ end }}>
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <p>Active</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group d-flex mt-4">
+                                                                        <input type="hidden" name="id" value="{{ $team.ID }}">
+                                                                        <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                                        <a href="/team/delete/{{ $team.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $team.Name }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {{ end }}
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="8" class="p-0">  
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="code">Event Code</label>
+                                                                <input id="code" type="text" class="form-control" name="code" placeholder="Event Code">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="code">Group Code</label>
+                                                                <input id="code" type="text" class="form-control" name="code" placeholder="Group Code">
+                                                            </div>
+                                                        </td>
+                                                        <td rowspan="2" width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="code">Event Name</label>
+                                                                <textarea name="event_name" class="form-control" rows="5"></textarea>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="team_a_code">Team A Code</label>
+                                                                <select id="team_a_code" name="team_a_code" class="form-control">
+                                                                    <option value="Warrior A">Warrior A</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="team_b_code">Team B Code</label>
+                                                                <select id="team_b_code" name="team_b_code" class="form-control">
+                                                                    <option value="Warrior B">Warrior B</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="date">Date</label>
+                                                                <input id="date" type="date" class="form-control" name="date" placeholder="Date">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="start_time">Start Time</label>
+                                                                <input id="start_time" type="text" class="form-control" name="start_time" placeholder="Start Time">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="end_time">End time</label>
+                                                                <input id="end_time" type="text" class="form-control" name="end_time" placeholder="End Time">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="event_pic">Event PIC</label>
+                                                                <input id="event_pic" type="text" class="form-control" name="event_pic" placeholder="Event PIC">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="city">City</label>
+                                                                <select id="city" name="city" class="form-control">
+                                                                    <option value="Jakarta">Jakarta</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="event_location">Event Location</label>
+                                                                <input id="event_location" type="text" class="form-control" name="event_location" placeholder="Event Location">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="price">Price</label>
+                                                                <input id="price" type="number" class="form-control" name="price" placeholder="Price">
+                                                            </div>
+                                                        </td>
+                                                        <td rowspan="2" width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="description">Description</label>
+                                                                <textarea name="description" class="form-control" rows="5"></textarea>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="youtube">Link Youtube</label>
+                                                                <input id="youtube" type="text" class="form-control" name="youtube" placeholder="Link Youtube">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="payment_method">Type of Payment</label>
+                                                                <select id="payment_method" name="payment_method" class="form-control">
+                                                                    <option value="Postpaid">Postpaid</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="photographer">Photographer</label>
+                                                                <input id="photographer" type="text" class="form-control" name="photographer" placeholder="Photographer">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="cover_image">Cover Image</label>
+                                                                <input id="cover_image" type="file" class="form-control" name="cover_image">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="media">Link Media</label>
+                                                                <input id="media" type="text" class="form-control" name="media" placeholder="Link Media">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div id="rosterList" class="tab-pane fade">
+                            
+                            <div class="mt-4">
+                                <div class="row mb-4">
+                                    <div class="col-sm-4">
+                                        <div class="d-flex align-items-center">
+                                            <label for="action">Action</label>
+                                            <div class="ml-3 wrap-fotogrit-select">
+                                                <select class="fotogrit-select" name="" id="action">
+                                                    <option value="">Edit</option>
+                                                    <option value="">Delete</option>
+                                                </select>
+                                                <div class="fotogrit-select-arrow">
+                                                    <i class="fa fa-angle-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 ml-auto">
+                                        <input type="text" class="form-control" placeholder="Search">
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th width="1">
+                                                <div class="form-group form-check">
+                                                    <input type="checkbox" class="form-check-input mt-0">
+                                                </div>
+                                            </th>
+                                            <th width="15%">Roster ID</th>
+                                            <th width="30%">Team</th>
+                                            <th width="30%">Jersey Number</th>
+                                            <th width="30%">User</th>
+                                            <th width="1">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{ range $i, $team := .teams }}
+                                        <tr>
+                                            <td colspan="6" class="p-0">
+                                                <form action="/team/edit" method="post">
+                                                    <table width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <td width="1">
+                                                                    <div class="form-group form-check">
+                                                                        <input type="checkbox" class="form-check-input mt-0">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="15%">{{ $team.Code }}</td>
+                                                                <td width="30%">{{ $team.Name }}</td>
+                                                                <td width="30%">{{ $team.Name }}</td>
+                                                                <td width="30%">{{ $team.Name }}</td>
+                                                                <td width="1">
+                                                                    <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $team.ID }}" aria-expanded="true" aria-controls="collapse{{ $team.ID }}">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="collapse{{ $team.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                                <td></td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="code">Code</label>
+                                                                        <input id="code" value="{{ $team.Code }}" type="text" class="form-control" name="code" placeholder="Code">
+                                                                    </div>    
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="name">Name</label>
+                                                                        <input id="name" value="{{ $team.Name }}" type="text" class="form-control" name="name" placeholder="Name">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="password">Status</label>
+                                                                        <div class="wrap-switch d-flex align-items-center">
+                                                                            <p>Non Active</p>
+                                                                            <label class="switch">
+                                                                                <input type="checkbox" name="status_id" {{ if eq $team.StatusId 1 }} checked {{ end }}>
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <p>Active</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group d-flex mt-4">
+                                                                        <input type="hidden" name="id" value="{{ $team.ID }}">
+                                                                        <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                                        <a href="/team/delete/{{ $team.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $team.Name }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {{ end }}
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="8" class="p-0">  
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="roster_id">Roster ID</label>
+                                                                <input id="roster_id" type="text" class="form-control" name="roster_id" placeholder="Roster ID">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="team">Team</label>
+                                                                <select id="team" name="team" class="form-control">
+                                                                    <option value="Team 001">Team 001</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="jersey_number">Jersey Number</label>
+                                                                <select id="jersey_number" name="jersey_number" class="form-control">
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="user">User</label>
+                                                                <select id="user" name="user" class="form-control">
+                                                                    <option value="Danny Doe">Danny Doe</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div id="mediaList" class="tab-pane fade">
+                            
+                            <div class="mt-4">
+                                <div class="row mb-4">
+                                    <div class="col-sm-4">
+                                        <div class="d-flex align-items-center">
+                                            <label for="action">Action</label>
+                                            <div class="ml-3 wrap-fotogrit-select">
+                                                <select class="fotogrit-select" name="" id="action">
+                                                    <option value="">Edit</option>
+                                                    <option value="">Delete</option>
+                                                </select>
+                                                <div class="fotogrit-select-arrow">
+                                                    <i class="fa fa-angle-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 ml-auto">
+                                        <input type="text" class="form-control" placeholder="Search">
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" width="1">
+                                                <div class="form-group form-check">
+                                                    <input type="checkbox" class="form-check-input mt-0">
+                                                </div>
+                                            </th>
+                                            <th rowspan="2" width="15%">Code Media</th>
+                                            <th rowspan="2" width="15%">Event Name</th>
+                                            <th rowspan="2" width="15%">Thumbnail</th>
+                                            <th rowspan="2" width="15%">Media Type</th>
+                                            <th rowspan="2" width="15%">Price</th>
+                                            <th colspan="5" width="30%" class="text-center">Tagging</th>
+                                            <th rowspan="2" width="1">Action</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Jersey</th>
+                                            <th>Team</th>
+                                            <th>Action</th>
+                                            <th>Other</th>
+                                            <th>User</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{ range $i, $team := .teams }}
+                                        <tr>
+                                            <td colspan="6" class="p-0">
+                                                <form action="/team/edit" method="post">
+                                                    <table width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <td width="1">
+                                                                    <div class="form-group form-check">
+                                                                        <input type="checkbox" class="form-check-input mt-0">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="15%">{{ $team.Code }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="1">
+                                                                    <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $team.ID }}" aria-expanded="true" aria-controls="collapse{{ $team.ID }}">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="collapse{{ $team.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                                <td></td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="code">Code</label>
+                                                                        <input id="code" value="{{ $team.Code }}" type="text" class="form-control" name="code" placeholder="Code">
+                                                                    </div>    
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="name">Name</label>
+                                                                        <input id="name" value="{{ $team.Name }}" type="text" class="form-control" name="name" placeholder="Name">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="password">Status</label>
+                                                                        <div class="wrap-switch d-flex align-items-center">
+                                                                            <p>Non Active</p>
+                                                                            <label class="switch">
+                                                                                <input type="checkbox" name="status_id" {{ if eq $team.StatusId 1 }} checked {{ end }}>
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <p>Active</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group d-flex mt-4">
+                                                                        <input type="hidden" name="id" value="{{ $team.ID }}">
+                                                                        <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                                        <a href="/team/delete/{{ $team.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $team.Name }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {{ end }}
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="10" class="p-0">  
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="code_media">Code Media</label>
+                                                                <input id="code_media" type="text" class="form-control" name="code_media" placeholder="Code Media">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="event_name">Event Name</label>
+                                                                <select id="event_name" name="event_name" class="form-control">
+                                                                    <option value="Acara 1">Acara 1</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="cover_image">Cover Image</label>
+                                                                <input id="cover_image" type="file" class="form-control" name="cover_image">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="media_type">Media Type</label>
+                                                                <select id="media_type" name="media_type" class="form-control">
+                                                                    <option value="Foto">Foto</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="price">Price</label>
+                                                                <input id="price" type="text" class="form-control" name="price" placeholder="Price">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="bg-white">
+                                                        <td colspan="5" class="pb-0">Tagging</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="jersey_number">Jersey</label>
+                                                                <input id="jersey_number" type="number" class="form-control" name="jersey_number" placeholder="Jersey Number">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="team">Team</label>
+                                                                <input id="team" type="text" class="form-control" name="team" placeholder="Team">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="action">Action</label>
+                                                                <select id="action" name="action" class="form-control">
+                                                                    <option value="Shooting">Shooting</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="other">Other</label>
+                                                                <input id="other" type="text" class="form-control" name="other" placeholder="Other">
+                                                            </div>
+                                                        </td>
+                                                        <td width="20%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="user">User</label>
+                                                                <select id="user" name="user" class="form-control">
+                                                                    <option value="Reandy">Reandy</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div id="assignmentList" class="tab-pane fade">
+                            
+                            <div class="mt-4">
+                                <div class="row mb-4">
+                                    <div class="col-sm-4">
+                                        <div class="d-flex align-items-center">
+                                            <label for="action">Action</label>
+                                            <div class="ml-3 wrap-fotogrit-select">
+                                                <select class="fotogrit-select" name="" id="action">
+                                                    <option value="">Edit</option>
+                                                    <option value="">Delete</option>
+                                                </select>
+                                                <div class="fotogrit-select-arrow">
+                                                    <i class="fa fa-angle-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 ml-auto">
+                                        <input type="text" class="form-control" placeholder="Search">
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" width="1">
+                                                <div class="form-group form-check">
+                                                    <input type="checkbox" class="form-check-input mt-0">
+                                                </div>
+                                            </th>
+                                            <th rowspan="2" width="12%">Assignment Code</th>
+                                            <th rowspan="2" width="12%">Event Name</th>
+                                            <th rowspan="2" width="12%">Date & Time</th>
+                                            <th rowspan="2" width="12%">Photographer</th>
+                                            <th rowspan="2" width="12%">Status</th>
+                                            <th rowspan="2" width="12%">Actual Date</th>
+                                            <th colspan="2" width="20%" class="text-center">Actual Time</th>
+                                            <th rowspan="2" width="12%">Desc</th>
+                                            <th rowspan="2" width="1">Action</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Clock In</th>
+                                            <th>Clock Out</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{ range $i, $team := .teams }}
+                                        <tr>
+                                            <td colspan="6" class="p-0">
+                                                <form action="/team/edit" method="post">
+                                                    <table width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <td width="1">
+                                                                    <div class="form-group form-check">
+                                                                        <input type="checkbox" class="form-check-input mt-0">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="15%">{{ $team.Code }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="15%">{{ $team.Name }}</td>
+                                                                <td width="1">
+                                                                    <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $team.ID }}" aria-expanded="true" aria-controls="collapse{{ $team.ID }}">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="collapse{{ $team.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                                <td></td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="code">Code</label>
+                                                                        <input id="code" value="{{ $team.Code }}" type="text" class="form-control" name="code" placeholder="Code">
+                                                                    </div>    
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="name">Name</label>
+                                                                        <input id="name" value="{{ $team.Name }}" type="text" class="form-control" name="name" placeholder="Name">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                        <label for="password">Status</label>
+                                                                        <div class="wrap-switch d-flex align-items-center">
+                                                                            <p>Non Active</p>
+                                                                            <label class="switch">
+                                                                                <input type="checkbox" name="status_id" {{ if eq $team.StatusId 1 }} checked {{ end }}>
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <p>Active</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group d-flex mt-4">
+                                                                        <input type="hidden" name="id" value="{{ $team.ID }}">
+                                                                        <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                                        <a href="/team/delete/{{ $team.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $team.Name }}?')" class="btn w-100 btn-outline-danger">Delete</a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {{ end }}
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="10" class="p-0">  
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="10%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="assignment_code">Assignment Code</label>
+                                                                <input id="assignment_code" type="text" class="form-control" name="assignment_code" placeholder="Assignment Code">
+                                                            </div>
+                                                        </td>
+                                                        <td width="10%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="event_group">Event Group</label>
+                                                                <input id="event_group" type="text" class="form-control" name="event_group" placeholder="Event Group">
+                                                            </div>
+                                                        </td>
+                                                        <td width="10%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="event_name">Event Name</label>
+                                                                <input id="event_name" type="text" class="form-control" name="event_name" placeholder="Event Name">
+                                                            </div>
+                                                        </td>
+                                                        <td width="10%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="date_time">Date & Time</label>
+                                                                <input id="date_time" type="text" class="form-control" name="date_time" placeholder="Date & Time">
+                                                            </div>
+                                                        </td>
+                                                        <td width="10%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="location">Location</label>
+                                                                <input id="location" type="text" class="form-control" name="location" placeholder="Location">
+                                                            </div>
+                                                        </td>
+                                                        <td width="10%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="type_assignment">Type Assignment</label>
+                                                                <select id="type_assignment" name="type_assignment" class="form-control">
+                                                                    <option value="Photo Only">Photo Only</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="16%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="photographer">Photographer</label>
+                                                                <select id="photographer" name="photographer" class="form-control">
+                                                                    <option value="Cahyadi">Cahyadi</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td width="16%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="status">Status</label>
+                                                                <input id="status" type="text" class="form-control" name="status" placeholder="Status">
+                                                            </div>
+                                                        </td>
+                                                        <td width="16%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="actual_date">Actual Date</label>
+                                                                <input id="actual_date" type="text" class="form-control" name="actual_date" placeholder="Actual Date">
+                                                            </div>
+                                                        </td>
+                                                        <td width="16%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="clock_in">Clock In</label>
+                                                                <input id="clock_in" type="text" class="form-control" name="clock_in" placeholder="Clock In">
+                                                            </div>
+                                                        </td>
+                                                        <td width="16%" class="pb-0">
+                                                            <div class="form-group mb-0">
+                                                                <label for="clock_out">Clock Out</label>
+                                                                <input id="clock_out" type="text" class="form-control" name="clock_out" placeholder="Clock Out">
+                                                            </div>
+                                                        </td>
+                                                        <td width="16%" class="pb-0"></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ end }}

@@ -7,7 +7,6 @@ import (
 
 	"github.com/DProject89/cmsfoto/app/models"
 	"github.com/gorilla/mux"
-	uuid "github.com/satori/go.uuid"
 
 	"github.com/unrolled/render"
 	"gorm.io/driver/postgres"
@@ -89,7 +88,7 @@ func (server *Server) UserEdit(w http.ResponseWriter, r *http.Request) {
 	}
 	var user models.User
 	server.DB.First(&user, r.PostForm.Get("id"))
-	server.DB.Model(&user).Create(map[string]interface{}{
+	server.DB.Model(&user).Updates(map[string]interface{}{
 		"name":      r.PostForm.Get("name"),
 		"email":     r.PostForm.Get("email"),
 		"status_id": statusId,
@@ -114,7 +113,6 @@ func (server *Server) UserAdd(w http.ResponseWriter, r *http.Request) {
 	}
 
 	server.DB.Model(models.User{}).Create(map[string]interface{}{
-		"id":        uuid.NewV4(),
 		"name":      r.PostForm.Get("name"),
 		"email":     r.PostForm.Get("email"),
 		"password":  r.PostForm.Get("password"),
