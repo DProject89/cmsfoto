@@ -1833,6 +1833,10 @@ table.dbkit-table tr td {
     padding: 16px 48px;
     padding: 1rem 3rem;
     line-height: 19px;
+    color: #000;
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    background-color: #000;
 }
 
 /*-------------------- END Badge------------------- */
@@ -1939,8 +1943,12 @@ p.card-text {
 .form-control {
     font-size: 14px;
     border: 1px solid #111111;
-    padding: 10.72px 12.8px;
+    /* padding: 10.72px 12.8px; */
     padding: .67rem .8rem;
+    min-height: 44px;
+}
+select.form-control:not([size]):not([multiple]) {
+    min-height: 44px;
 }
 
 .form-control-sm,
@@ -2890,9 +2898,8 @@ ul.custom-breadcrumb li.active {
 }
 
 .fotogrit-select {
-    width: 192px;
-    padding: 8px 12px;
-
+    min-width: 192px;
+    padding: 8px 36px 8px 12px;
     border: 1px solid #111111;
     border-radius: 4px;
 }
@@ -3003,4 +3010,9 @@ input:checked+.slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+input[type="file"] {
+    height: 44px;
+    padding: 8px;
 }

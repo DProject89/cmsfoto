@@ -1,0 +1,256 @@
+{{ define "event_groups" }}
+
+<div class="row">
+    <div class="col-lg-12 mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title">Event Group Data</h4>
+                <ul class="custom-breadcrumb">
+                    <li>Event Group</li>
+                    <li class="active">Event Group Data</li>
+                </ul>
+
+                <div class="mt-3">
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <label for="action">Action</label>
+                                <div class="wrap-fotogrit-select">
+                                    <select class="ml-3 fotogrit-select" name="" id="action">
+                                        <option value="">Edit</option>
+                                        <option value="">Delete</option>
+                                    </select>
+                                    <div class="fotogrit-select-arrow">
+                                        <i class="fa fa-angle-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 ml-auto">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                    </div>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th width="1%">
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" class="form-check-input mt-0">
+                                    </div>
+                                </th>
+                                <th width="10%">Group Code</th>
+                                <th width="20%">Group Name</th>
+                                <th width="20%">Company Name</th>
+                                <th width="15%">Organizer PIC</th>
+                                <th width="10%">Event Date</th>
+                                <th width="20%">Location</th>
+                                <th width="5%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ range $i, $event_group := .event_groups }}
+                            <tr>
+                                <td colspan="8" class="p-0">
+                                    <form action="/event-group/edit" method="post">
+                                        <table width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <td width="1%">
+                                                        <div class="form-group form-check">
+                                                            <input type="checkbox" class="form-check-input mt-0">
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%">{{ $event_group.ID }}</td>
+                                                    <td width="20%">{{ $event_group.Name }}</td>
+                                                    <td width="20%">{{ $event_group.OrganizerName }}</td>
+                                                    <td width="15%">{{ $event_group.PicOrganizer }}</td>
+                                                    <td width="10%">{{ $event_group.DateStart }}</td>
+                                                    <td width="20%">{{ $event_group.Location }}</td>
+                                                    <td width="5%">
+                                                        <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $event_group.ID }}" aria-expanded="true" aria-controls="collapse{{ $event_group.ID }}">
+                                                            <i class="fa fa-angle-down"></i>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <td></td>
+                                                <td colspan="7">
+                                                    <div id="collapse{{ $event_group.ID }}" class="collapse bg-white" data-parent="#accordionExample">
+                                                        <div class="row mt-3">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="code">Group Code</label>
+                                                                    <input value="{{ $event_group.Code }}" id="code" type="text" class="form-control" name="code" placeholder="Group Code">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="name">Group Name</label>
+                                                                    <input value="{{ $event_group.Name }}" id="name" type="text" class="form-control" name="name" placeholder="Group Name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="organizer_name">Company Name</label>
+                                                                    <input value="{{ $event_group.OrganizerName }}" id="organizer_name" type="text" class="form-control" name="organizer_name" placeholder="Company Name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="pic_organizer">Organizer PIC</label>
+                                                                    <input value="{{ $event_group.PicOrganizer }}" id="pic_organizer" type="text" class="form-control" name="pic_organizer" placeholder="Organizer PIC">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="date_start">Start Date</label>
+                                                                    <input value="{{ $event_group.DateStart }}" id="date_start" type="date" class="form-control" name="date_start" placeholder="Start Date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="date_finish">End Date</label>
+                                                                    <input value="{{ $event_group.DateFinish }}" id="date_finish" type="date" class="form-control" name="date_finish" placeholder="End Date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="city">City</label>
+                                                                    <select name="city" class="form-control">
+                                                                        <option value="Jakarta">Jakarta</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="location">Location</label>
+                                                                    <textarea name="location" class="form-control" rows="4">{{ $event_group.Location }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="event_type">Event Type</label>
+                                                                    <input value="{{ $event_group.EventType }}" id="event_type" type="text" class="form-control" name="event_type" placeholder="Event Type">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="price">Price</label>
+                                                                    <input value="{{ $event_group.Price }}" id="price" type="number" class="form-control" name="price" placeholder="Price">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="event_logo">Event Logo Photo</label>
+                                                                    <input id="event_logo" type="file" class="form-control" name="event_logo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 ml-auto">
+                                                            <div class="form-group d-flex mt-4">
+                                                                <button type="submit" class="btn w-100 btn-dark mr-2">Add</button>
+                                                                <button type="button" class="btn w-100 btn-outline-danger">Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </td>
+                            </tr>
+                            {{ end }}
+                            <tr>
+                                <td></td>
+                                <td colspan="7">
+                                    <form action="/event-group/add" method="post">
+                                        <div class="row mt-3">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="code">Group Code</label>
+                                                    <input id="code" type="text" class="form-control" name="code" placeholder="Group Code">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="name">Group Name</label>
+                                                    <input id="name" type="text" class="form-control" name="name" placeholder="Group Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="organizer_name">Company Name</label>
+                                                    <input id="organizer_name" type="text" class="form-control" name="organizer_name" placeholder="Company Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="pic_organizer">Organizer PIC</label>
+                                                    <input id="pic_organizer" type="text" class="form-control" name="pic_organizer" placeholder="Organizer PIC">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="date_start">Start Date</label>
+                                                    <input id="date_start" type="date" class="form-control" name="date_start" placeholder="Start Date">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="date_finish">End Date</label>
+                                                    <input id="date_finish" type="date" class="form-control" name="date_finish" placeholder="End Date">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="city">City</label>
+                                                    <select name="city" class="form-control">
+                                                        <option value="Jakarta">Jakarta</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="location">Location</label>
+                                                    <textarea name="location" class="form-control" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="event_type">Event Type</label>
+                                                    <input id="event_type" type="text" class="form-control" name="event_type" placeholder="Event Type">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="price">Price</label>
+                                                    <input id="price" type="number" class="form-control" name="price" placeholder="Price">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="event_logo">Event Logo Photo</label>
+                                                    <input id="event_logo" type="file" class="form-control" name="event_logo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 ml-auto">
+                                            <div class="form-group d-flex mt-4">
+                                                <button type="submit" class="btn w-100 btn-dark mr-2">Add</button>
+                                                <button type="button" class="btn w-100 btn-outline-danger">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ end }}
