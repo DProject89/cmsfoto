@@ -19,6 +19,7 @@ type EventGroup struct {
 	EventType     string `gorm:"size:255"`
 	Price         string `gorm:"size:255"`
 	EventLogo     string `gorm:"size:255"`
+	HasEvent      int
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 	DeletedAt     gorm.DeletedAt

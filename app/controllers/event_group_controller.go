@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -21,8 +22,14 @@ func (server *Server) EventGroups(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var event_group models.EventGroup
+	server.DB.Last(&event_group)
+
+	var groupCode = "GC" + fmt.Sprintf("%03d", event_group.ID+1)
+
 	_ = render.HTML(w, http.StatusOK, "event_groups", map[string]interface{}{
 		"event_groups": event_groups,
+		"groupCode":    groupCode,
 	})
 }
 
@@ -100,3 +107,35 @@ func (server *Server) EventGroupDelete(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/event-groups", http.StatusSeeOther)
 }
+
+// func (server *Server) EventGroupCreateEvent(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	EventGroupID := vars["id"]
+
+// 	err := r.ParseForm()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	var event models.Event
+// 	server.DB.Last(&event)
+
+// 	var eventCode = "E" + fmt.Sprintf("%03d", event.ID+1)
+
+// 	server.DB.Model(models.Event{}).Create(map[string]interface{}{
+// 		"event_group_id": EventGroupID,
+// 		"code":           eventCode,
+// 	})
+
+// 	var event_group models.EventGroup
+// 	server.DB.First(&event_group, EventGroupID)
+// 	server.DB.Model(&event_group).Updates(map[string]interface{}{
+// 		"has_event": 1,
+// 	})
+
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 	}
+
+// 	http.Redirect(w, r, "/events?group="+EventGroupID, http.StatusSeeOther)
+// }

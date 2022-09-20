@@ -20,11 +20,14 @@ func (server *Server) initializeRoutes() {
 	server.Router.HandleFunc("/event-group/delete/{id}", server.EventGroupDelete).Methods("GET")
 
 	server.Router.HandleFunc("/events", server.Events).Methods("GET")
+	server.Router.HandleFunc("/event/add", server.EventAdd).Methods("POST")
 
 	server.Router.HandleFunc("/teams", server.Teams).Methods("GET")
 	server.Router.HandleFunc("/team/edit", server.TeamEdit).Methods("POST")
 	server.Router.HandleFunc("/team/add", server.TeamAdd).Methods("POST")
 	server.Router.HandleFunc("/team/delete/{id}", server.TeamDelete).Methods("GET")
+
+	server.Router.HandleFunc("/event_team/add", server.EventTeamAdd).Methods("POST")
 
 	server.Router.HandleFunc("/roles", server.Roles).Methods("GET")
 	server.Router.HandleFunc("/role/edit", server.RoleEdit).Methods("POST")
