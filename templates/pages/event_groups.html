@@ -41,11 +41,11 @@
                                 </th>
                                 <th width="10%">Group Code</th>
                                 <th width="20%">Group Name</th>
-                                <th width="20%">Company Name</th>
+                                <th width="15%">Company Name</th>
                                 <th width="15%">Organizer PIC</th>
                                 <th width="10%">Event Date</th>
-                                <th width="20%">Location</th>
-                                <th width="5%">Action</th>
+                                <th width="15%">Location</th>
+                                <th width="15%" class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,13 +61,19 @@
                                                             <input type="checkbox" class="form-check-input mt-0">
                                                         </div>
                                                     </td>
-                                                    <td width="10%">{{ $event_group.ID }}</td>
+                                                    <td width="10%">{{ $event_group.Code }}</td>
                                                     <td width="20%">{{ $event_group.Name }}</td>
-                                                    <td width="20%">{{ $event_group.OrganizerName }}</td>
+                                                    <td width="15%">{{ $event_group.OrganizerName }}</td>
                                                     <td width="15%">{{ $event_group.PicOrganizer }}</td>
                                                     <td width="10%">{{ $event_group.DateStart }}</td>
-                                                    <td width="20%">{{ $event_group.Location }}</td>
-                                                    <td width="5%">
+                                                    <td width="15%">{{ $event_group.Location }}</td>
+                                                    <td width="15%" class="text-center">
+                                                        {{ if eq $event_group.HasEvent 0 }} 
+                                                        <a href="/events?group={{ $event_group.ID }}" class="btn btn-dark btn-xs mr-1">Next</a>
+                                                        {{ else }}
+                                                        <a href="/event-group/{{ $event_group.ID }}" class="btn btn-dark btn-xs mr-1">Detail</a>
+                                                        {{ end }}
+                                                        
                                                         <div class="btn btn-fotogrit-dropdown" type="button" data-toggle="collapse" data-target="#collapse{{ $event_group.ID }}" aria-expanded="true" aria-controls="collapse{{ $event_group.ID }}">
                                                             <i class="fa fa-angle-down"></i>
                                                         </div>
@@ -150,7 +156,8 @@
                                                         </div>
                                                         <div class="col-sm-3 ml-auto">
                                                             <div class="form-group d-flex mt-4">
-                                                                <button type="submit" class="btn w-100 btn-dark mr-2">Add</button>
+                                                                <input type="hidden" name="id" value="{{ $event_group.ID }}">
+                                                                <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
                                                                 <button type="button" class="btn w-100 btn-outline-danger">Cancel</button>
                                                             </div>
                                                         </div>
@@ -170,7 +177,7 @@
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label for="code">Group Code</label>
-                                                    <input id="code" type="text" class="form-control" name="code" placeholder="Group Code">
+                                                    <input id="code" type="text" class="form-control" name="code" placeholder="Group Code" readonly value="{{ .groupCode }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
