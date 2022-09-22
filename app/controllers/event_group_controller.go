@@ -2,8 +2,11 @@ package controllers
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/DProject89/cmsfoto/app/models"
 	"github.com/gorilla/mux"
@@ -34,9 +37,47 @@ func (server *Server) EventGroups(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) EventGroupEdit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	if err := r.ParseMultipartForm(1024); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	uploadedFile, handler, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer uploadedFile.Close()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fileExtension := filepath.Ext(handler.Filename)
+	filename := r.PostForm.Get("code") + fileExtension
+	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer targetFile.Close()
+
+	if _, err := io.Copy(targetFile, uploadedFile); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	var event_group models.EventGroup
@@ -52,7 +93,7 @@ func (server *Server) EventGroupEdit(w http.ResponseWriter, r *http.Request) {
 		"city":           r.PostForm.Get("city"),
 		"event_type":     r.PostForm.Get("event_type"),
 		"price":          r.PostForm.Get("price"),
-		"event_logo":     r.PostForm.Get("event_logo"),
+		"event_logo":     "public/images/uploads/" + filename,
 	})
 
 	if err != nil {
@@ -63,9 +104,47 @@ func (server *Server) EventGroupEdit(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) EventGroupAdd(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	if err := r.ParseMultipartForm(1024); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	uploadedFile, handler, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer uploadedFile.Close()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fileExtension := filepath.Ext(handler.Filename)
+	filename := r.PostForm.Get("code") + fileExtension
+	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer targetFile.Close()
+
+	if _, err := io.Copy(targetFile, uploadedFile); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	server.DB.Model(models.EventGroup{}).Create(map[string]interface{}{
@@ -79,7 +158,7 @@ func (server *Server) EventGroupAdd(w http.ResponseWriter, r *http.Request) {
 		"city":           r.PostForm.Get("city"),
 		"event_type":     r.PostForm.Get("event_type"),
 		"price":          r.PostForm.Get("price"),
-		"event_logo":     r.PostForm.Get("event_logo"),
+		"event_logo":     "public/images/uploads/" + filename,
 	})
 
 	if err != nil {
