@@ -50,7 +50,7 @@
                             {{ range $i, $team := .teams }}
                             <tr>
                                 <td colspan="8" class="p-0">
-                                    <form action="/team/edit" method="post">
+                                    <form action="/team/edit" method="post" enctype="multipart/form-data">
                                         <table width="100%">
                                             <thead>
                                                 <tr>
@@ -59,7 +59,9 @@
                                                             <input type="checkbox" class="form-check-input mt-0">
                                                         </div>
                                                     </td>
-                                                    <td width="10%">{{ $team.LogoTeam }}</td>
+                                                    <td width="10%">
+                                                        <img src="{{ $team.LogoTeam }}" alt="" class="img-fluid">
+                                                    </td>
                                                     <td width="20%">{{ $team.Name }}</td>
                                                     <td width="20%">{{ $team.PicTeam }}</td>
                                                     <td width="15%">{{ $team.PicTeamPhoneNumber }}</td>
@@ -128,15 +130,16 @@
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <div class="form-group">
-                                                                    <label for="event_logo">Logo</label>
-                                                                    <input id="event_logo" type="file" class="form-control" name="event_logo">
+                                                                    <label for="team_logo">Logo</label>
+                                                                    <input id="team_logo" type="file" class="form-control" name="file">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-3 ml-auto">
                                                             <div class="form-group d-flex mt-4">
-                                                                <button type="submit" class="btn w-100 btn-dark mr-2">Add</button>
-                                                                <button type="button" class="btn w-100 btn-outline-danger">Cancel</button>
+                                                                <input type="hidden" name="id" value="{{ $team.ID }}">
+                                                            <button type="submit" class="btn w-100 btn-dark mr-2">Save</button>
+                                                            <a href="/team/delete/{{ $team.ID }}" type="button" onclick="return confirm('are you sure to delete {{ $team.Name }}?')" class="btn w-100 btn-outline-danger">Delete</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -150,12 +153,12 @@
                             <tr>
                                 <td></td>
                                 <td colspan="7">
-                                    <form action="/team/add" method="post">
+                                    <form action="/team/add" method="post" enctype="multipart/form-data">
                                         <div class="row mt-3">
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label for="code">Team Code</label>
-                                                    <input id="code" type="text" class="form-control" name="code" placeholder="Team Code">
+                                                    <input id="code" type="text" class="form-control" name="code" placeholder="Team Code" readonly value="{{ .teamCode }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
@@ -204,8 +207,8 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label for="event_logo">Logo</label>
-                                                    <input id="event_logo" type="file" class="form-control" name="event_logo">
+                                                    <label for="team_logo">Logo</label>
+                                                    <input id="team_logo" type="file" class="form-control" name="file">
                                                 </div>
                                             </div>
                                         </div>

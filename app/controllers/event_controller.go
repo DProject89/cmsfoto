@@ -2,8 +2,11 @@ package controllers
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/DProject89/cmsfoto/app/models"
 	"github.com/unrolled/render"
@@ -81,9 +84,47 @@ func (server *Server) EventTeamAdd(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) EventAdd(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	if err := r.ParseMultipartForm(1024); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	uploadedFile, handler, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer uploadedFile.Close()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fileExtension := filepath.Ext(handler.Filename)
+	filename := r.PostForm.Get("code") + fileExtension
+	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer targetFile.Close()
+
+	if _, err := io.Copy(targetFile, uploadedFile); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	server.DB.Model(models.Event{}).Create(map[string]interface{}{
@@ -103,9 +144,9 @@ func (server *Server) EventAdd(w http.ResponseWriter, r *http.Request) {
 		"payment_method":  r.PostForm.Get("payment_method"),
 		"photographer_id": r.PostForm.Get("photographer_id"),
 		"price":           r.PostForm.Get("price"),
-		"cover_image":     r.PostForm.Get("cover_image"),
 		"link_youtube":    r.PostForm.Get("link_youtube"),
 		"link_media":      r.PostForm.Get("link_media"),
+		"cover_image":     "public/images/uploads/" + filename,
 	})
 
 	if err != nil {

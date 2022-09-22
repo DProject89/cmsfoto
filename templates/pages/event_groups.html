@@ -52,7 +52,7 @@
                             {{ range $i, $event_group := .event_groups }}
                             <tr>
                                 <td colspan="8" class="p-0">
-                                    <form action="/event-group/edit" method="post">
+                                    <form action="/event-group/edit" method="post" enctype="multipart/form-data">
                                         <table width="100%">
                                             <thead>
                                                 <tr>
@@ -150,7 +150,7 @@
                                                             <div class="col-sm-3">
                                                                 <div class="form-group">
                                                                     <label for="event_logo">Event Logo Photo</label>
-                                                                    <input id="event_logo" type="file" class="form-control" name="event_logo">
+                                                                    <input id="event_logo" type="file" class="form-control" name="file">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -172,7 +172,7 @@
                             <tr>
                                 <td></td>
                                 <td colspan="7">
-                                    <form action="/event-group/add" method="post">
+                                    <form action="/event-group/add" method="post" enctype="multipart/form-data">
                                         <div class="row mt-3">
                                             <div class="col-sm-3">
                                                 <div class="form-group">
@@ -239,7 +239,7 @@
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label for="event_logo">Event Logo Photo</label>
-                                                    <input id="event_logo" type="file" class="form-control" name="event_logo">
+                                                    <input id="event_logo" type="file" class="form-control" name="file">
                                                 </div>
                                             </div>
                                         </div>

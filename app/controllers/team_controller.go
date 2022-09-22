@@ -1,8 +1,12 @@
 package controllers
 
 import (
+	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/DProject89/cmsfoto/app/models"
 	"github.com/gorilla/mux"
@@ -21,15 +25,59 @@ func (server *Server) Teams(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var team models.Team
+	server.DB.Last(&team)
+
+	var teamCode = "TC" + fmt.Sprintf("%03d", team.ID+1)
+
 	_ = render.HTML(w, http.StatusOK, "teams", map[string]interface{}{
-		"teams": teams,
+		"teams":    teams,
+		"teamCode": teamCode,
 	})
 }
 
 func (server *Server) TeamEdit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	if err := r.ParseMultipartForm(1024); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	uploadedFile, handler, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer uploadedFile.Close()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fileExtension := filepath.Ext(handler.Filename)
+	filename := r.PostForm.Get("code") + fileExtension
+	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer targetFile.Close()
+
+	if _, err := io.Copy(targetFile, uploadedFile); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	var team models.Team
@@ -43,6 +91,7 @@ func (server *Server) TeamEdit(w http.ResponseWriter, r *http.Request) {
 		"pic_team_email":        r.PostForm.Get("pic_team_email"),
 		"instagram_team":        r.PostForm.Get("instagram_team"),
 		"city":                  r.PostForm.Get("city"),
+		"logo_team":             "public/images/uploads/" + filename,
 	})
 
 	if err != nil {
@@ -53,9 +102,47 @@ func (server *Server) TeamEdit(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) TeamAdd(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	if err := r.ParseMultipartForm(1024); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	uploadedFile, handler, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer uploadedFile.Close()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fileExtension := filepath.Ext(handler.Filename)
+	filename := r.PostForm.Get("code") + fileExtension
+	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer targetFile.Close()
+
+	if _, err := io.Copy(targetFile, uploadedFile); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	server.DB.Model(models.Team{}).Create(map[string]interface{}{
@@ -67,6 +154,7 @@ func (server *Server) TeamAdd(w http.ResponseWriter, r *http.Request) {
 		"pic_team_email":        r.PostForm.Get("pic_team_email"),
 		"instagram_team":        r.PostForm.Get("instagram_team"),
 		"city":                  r.PostForm.Get("city"),
+		"logo_team":             "assets/images/uploads" + filename,
 	})
 
 	if err != nil {

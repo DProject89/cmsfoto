@@ -7,7 +7,7 @@ import (
 )
 
 type User struct {
-	ID            string `gorm:"size:36;not null;uniqueIndex;primary_key"`
+	ID            int    `gorm:"size:36;not null;uniqueIndex;primary_key"`
 	KTP           string `gorm:"size:255"`
 	Name          string `gorm:"size:255;not null"`
 	Gender        string `gorm:"size:255"`

@@ -39,6 +39,16 @@ func (server *Server) initializeRoutes() {
 	server.Router.HandleFunc("/team/add", server.TeamAdd).Methods("POST")
 	server.Router.HandleFunc("/team/delete/{id}", server.TeamDelete).Methods("GET")
 
+	server.Router.HandleFunc("/tagging-types", server.TaggingTypes).Methods("GET")
+	server.Router.HandleFunc("/tagging-type/edit", server.TaggingTypeEdit).Methods("POST")
+	server.Router.HandleFunc("/tagging-type/add", server.TaggingTypeAdd).Methods("POST")
+	server.Router.HandleFunc("/tagging-type/delete/{id}", server.TaggingTypeDelete).Methods("GET")
+
+	server.Router.HandleFunc("/taggings", server.Taggings).Methods("GET")
+	server.Router.HandleFunc("/tagging/edit", server.TaggingEdit).Methods("POST")
+	server.Router.HandleFunc("/tagging/add", server.TaggingAdd).Methods("POST")
+	server.Router.HandleFunc("/tagging/delete/{id}", server.TaggingDelete).Methods("GET")
+
 	staticFileDirectory := http.Dir("./assets/")
 	staticFileHandler := http.StripPrefix("/public/", http.FileServer(staticFileDirectory))
 	server.Router.PathPrefix("/public/").Handler(staticFileHandler).Methods("GET")
