@@ -67,7 +67,7 @@ func (server *Server) EventGroupEdit(w http.ResponseWriter, r *http.Request) {
 
 	fileExtension := filepath.Ext(handler.Filename)
 	filename := r.PostForm.Get("code") + fileExtension
-	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	fileLocation := filepath.Join(dir, "public/images/uploads/", filename)
 	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -134,7 +134,7 @@ func (server *Server) EventGroupAdd(w http.ResponseWriter, r *http.Request) {
 
 	fileExtension := filepath.Ext(handler.Filename)
 	filename := r.PostForm.Get("code") + fileExtension
-	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	fileLocation := filepath.Join(dir, "public/images/uploads/", filename)
 	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -67,7 +67,7 @@ func (server *Server) TeamEdit(w http.ResponseWriter, r *http.Request) {
 
 	fileExtension := filepath.Ext(handler.Filename)
 	filename := r.PostForm.Get("code") + fileExtension
-	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	fileLocation := filepath.Join(dir, "public/images/uploads/", filename)
 	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -132,7 +132,7 @@ func (server *Server) TeamAdd(w http.ResponseWriter, r *http.Request) {
 
 	fileExtension := filepath.Ext(handler.Filename)
 	filename := r.PostForm.Get("code") + fileExtension
-	fileLocation := filepath.Join(dir, "assets/images/uploads", filename)
+	fileLocation := filepath.Join(dir, "public/images/uploads/", filename)
 	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -154,7 +154,7 @@ func (server *Server) TeamAdd(w http.ResponseWriter, r *http.Request) {
 		"pic_team_email":        r.PostForm.Get("pic_team_email"),
 		"instagram_team":        r.PostForm.Get("instagram_team"),
 		"city":                  r.PostForm.Get("city"),
-		"logo_team":             "assets/images/uploads" + filename,
+		"logo_team":             "public/images/uploads/" + filename,
 	})
 
 	if err != nil {
